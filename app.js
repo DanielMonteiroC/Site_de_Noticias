@@ -1,13 +1,13 @@
-let qntNoticias = 5; // número de noticias exibidas por páginas
-let pageFinal = qntNoticias; // índice
+let qntNoticias = 5;
+let pageFinal = qntNoticias;
 let pageInicial = 0;
-let temaAtual = "tecnologia+inovação+informação"; // tema inicial
+let temaAtual = "tecnologia+inovação+informação";
 
 let noticias = {
     "apiKey":"935d00cb78c44f8291159e6807972c57",
     fetchNoticias:function(categoria){
         fetch(
-            "https://newsapi.org/v2/everything?q=" // solicita noticias a API 
+            "https://newsapi.org/v2/everything?q="
             +categoria+
             "&pais=br&apiKey="+this.apiKey
         )
@@ -16,29 +16,29 @@ let noticias = {
     },
     displayNoticias: function(data){
         if(pageInicial==0){
-            document.querySelector(".container-noticias").textContent =""; // exibe as noticias na tela
+            document.querySelector(".container-noticias").textContent ="";
         }
 
         for(i=pageInicial;i<=pageFinal;i++){
             const {title} = data.articles[i];     
-            let h2 = document.createElement("h2"); // extrai o titulo da API e cria um h2 para exibir
+            let h2 = document.createElement("h2");
             h2.textContent = title;
     
             const {urlToImage} = data.articles[i];
-            let img = document.createElement("img"); // extrai a imagem da API e cria a imagem da noticia
+            let img = document.createElement("img");
             img.setAttribute("src", urlToImage);
 
-            let info_item = document.createElement("div"); // cria uma div e define a class para poder manipular no css
+            let info_item = document.createElement("div");
             info_item.className = "info_item";
             const {publishedAt} = data.articles[i];
             let dia = document.createElement("span");
             let date = publishedAt;
-            date=date.split("T")[0].split("-").reverse().join("-"); // formata a data
+            date=date.split("T")[0].split("-").reverse().join("-");
             dia.className = "dia";
             dia.textContent = date;
 
             const {name} = data.articles[i].source;
-            let fonte = document.createElement("span");  // fonte da noticia
+            let fonte = document.createElement("span");
             fonte.className = "fonte";
             fonte.textContent = name;
 
@@ -53,20 +53,20 @@ let noticias = {
             item.appendChild(img);
             item.appendChild(info_item);
             item.setAttribute("onclick", "location.href='"+url+"'");
-            document.querySelector(".container-noticias").appendChild(item);  // cria os itens a serem exibidos na tela
+            document.querySelector(".container-noticias").appendChild(item);
         }
 
         let btnproximo = document.createElement("span");
         btnproximo.id = "btnproximo";
         btnproximo.textContent = "Mais...";
         btnproximo.setAttribute("onclick","proximo()");
-        document.querySelector(".container-noticias").appendChild(btnproximo);  // cria e configura o Mais...
+        document.querySelector(".container-noticias").appendChild(btnproximo);
     }
 }
 
 function buscar(cat){
     pageInicial = 0;
-    pageFinal = qntNoticias;  // atualiza as variáveis de acordo com a categoria selecionada 
+    pageFinal = qntNoticias;
     temaAtual = cat;
     noticias.fetchNoticias(cat);
 }
@@ -75,7 +75,7 @@ function buscarTema(){
     pageInicial = 0;
     pageFinal = qntNoticias;
 
-    let tema = document.querySelector("#procurar").value;  // permite a busca por palavras chave
+    let tema = document.querySelector("#procurar").value;
     temaAtual = tema;
     noticias.fetchNoticias(temaAtual);
 }
@@ -83,7 +83,7 @@ function buscarTema(){
 function proximo(){
     pageInicial = pageFinal + 1;
     pageFinal = pageFinal + qntNoticias + 1;
-    document.querySelector("#btnproximo").remove(); // exibe a próxima pagina de noticias
+    document.querySelector("#btnproximo").remove();
     noticias.fetchNoticias(temaAtual);
 
 }
